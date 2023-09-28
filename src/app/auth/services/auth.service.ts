@@ -12,7 +12,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   register(data: RegisterRequestInterface): Observable<CurrentUserInterface> {
-    const url = environment.apiUrl + '/users';
+    const url = 'https://api.realworld.io/api' + '/users';
     return this.http
       .post<AuthResponseInterface>(url, data)
       .pipe(map((response) => response.user));
