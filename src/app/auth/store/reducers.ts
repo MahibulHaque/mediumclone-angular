@@ -1,11 +1,12 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { AuthStateInterface } from '../types/authState.interface';
-import { authActions } from './actions';
+import { authActions, authLoginActions } from './actions';
 
 const intialState: AuthStateInterface = {
   isSubmitting: false,
   isLoading: false,
   currentUser: undefined,
+  isLoggedIn: null,
   validationErrors: null,
 };
 
@@ -27,7 +28,32 @@ const authFeature = createFeature({
       ...state,
       isSubmitting: false,
       validationErrors: action.errors,
-    }))
+    })),
+    on(
+      authLoginActions.login,
+      (state): AuthStateInterface => ({
+        ...state,
+        isSubmitting: true,
+        validationErrors: null,
+      })
+    ),
+    on(
+      authLoginActions.loginSuccess,
+      (state, action): AuthStateInterface => ({
+        ...state,
+        isSubmitting: false,
+        currentUser: action.currentUser,
+        isLoggedIn: true,
+      })
+    ),
+    on(
+      authLoginActions.loginFailure,
+      (state, action): AuthStateInterface => ({
+        ...state,
+        isSubmitting: false,
+        validationErrors: action.errors,
+      })
+    )
   ),
 });
 
@@ -37,5 +63,6 @@ export const {
   selectIsSubmitting,
   selectIsLoading,
   selectCurrentUser,
-  selectValidationErrors
+  selectValidationErrors,
+  selectIsLoggedIn
 } = authFeature;

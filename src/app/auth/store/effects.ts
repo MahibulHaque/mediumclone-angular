@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { authActions } from './actions';
+import { authActions, authLoginActions } from './actions';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { CurrentUserInterface } from 'src/app/shared/types/currentUser.interface';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -36,6 +36,36 @@ export const registerEffect = createEffect(
   { functional: true }
 );
 
+export const LoginEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    authService = inject(AuthService),
+    persistanceService = inject(PersistenceService)
+  ) => {
+    return actions$.pipe(
+      ofType(authLoginActions.login),
+      switchMap(({ request }) => {
+        return authService.login(request).pipe(
+          map((currentUser: CurrentUserInterface) => {
+            persistanceService.set('accessToken', currentUser.token);
+            return authLoginActions.loginSuccess({ currentUser });
+          }),
+          catchError((errorResponse: HttpErrorResponse) => {
+            return of(
+              authLoginActions.loginFailure({
+                errors: errorResponse.error.errors,
+              })
+            );
+          })
+        );
+      })
+    );
+  },
+  {
+    functional: true,
+  }
+);
+
 export const redirectAfterRegisterEffect = createEffect(
   (actions$ = inject(Actions), router = inject(Router)) => {
     return actions$.pipe(
@@ -47,3 +77,4 @@ export const redirectAfterRegisterEffect = createEffect(
   },
   { functional: true, dispatch: false }
 );
+
