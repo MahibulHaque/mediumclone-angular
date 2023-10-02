@@ -9,6 +9,11 @@ import { authFeatureKey, authReducer } from './app/auth/store/reducers';
 import { provideHttpClient } from '@angular/common/http';
 import { provideEffects } from '@ngrx/effects';
 import * as authEffects from './app/auth/store/effects';
+import * as popularTagsEffects from './app/shared/components/popularTags/store/effects';
+import {
+  popularTagsFeatureKey,
+  popularTagsReducer,
+} from './app/shared/components/popularTags/store/reducers';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -16,7 +21,9 @@ bootstrapApplication(AppComponent, {
     provideRouter(appRoutes),
     provideStore(),
     provideState(authFeatureKey, authReducer),
+    provideState(popularTagsFeatureKey, popularTagsReducer),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     provideEffects(authEffects),
+    provideEffects(popularTagsEffects),
   ],
 });
