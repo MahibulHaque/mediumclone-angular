@@ -64,5 +64,5 @@ export const {
   selectIsLoading,
   selectCurrentUser,
   selectValidationErrors,
-  selectIsLoggedIn
+  selectIsLoggedIn,
 } = authFeature;
