@@ -12,6 +12,7 @@ import * as authEffects from './app/auth/store/effects';
 import * as popularTagsEffects from './app/shared/components/popularTags/store/effects';
 import * as feedEffects from './app/shared/components/feed/store/effects';
 import * as addToFavoritesEffect from './app/shared/components/addToFavorites/store/effects';
+import * as userProfileEffect from './app/userProfile/store/effects';
 import {
   popularTagsFeatureKey,
   popularTagsReducer,
@@ -20,6 +21,11 @@ import {
   feedFeatureKey,
   feedReducer,
 } from './app/shared/components/feed/store/reducers';
+
+import {
+  userProfileFeatureKey,
+  userProfileReducer,
+} from './app/userProfile/store/reducers';
 import { provideRouterStore } from '@ngrx/router-store';
 
 bootstrapApplication(AppComponent, {
@@ -30,8 +36,15 @@ bootstrapApplication(AppComponent, {
     provideState(authFeatureKey, authReducer),
     provideState(popularTagsFeatureKey, popularTagsReducer),
     provideState(feedFeatureKey, feedReducer),
+    provideState(userProfileFeatureKey, userProfileReducer),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    provideEffects(authEffects, popularTagsEffects, feedEffects, addToFavoritesEffect),
+    provideEffects(
+      authEffects,
+      popularTagsEffects,
+      feedEffects,
+      addToFavoritesEffect,
+      userProfileEffect
+    ),
     provideRouterStore(),
   ],
 });
