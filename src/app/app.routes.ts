@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { UserFeedComponent } from './userFeed/components/userFeed.component';
 
 export const appRoutes: Route[] = [
   {
@@ -17,6 +18,10 @@ export const appRoutes: Route[] = [
     path: 'login',
     loadChildren: () =>
       import('src/app/auth/auth.routes').then((m) => m.loginRoutes),
+  },
+  {
+    path:'feed',
+    component: UserFeedComponent
   },
   {
     path: 'profiles',
